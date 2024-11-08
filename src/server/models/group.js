@@ -1,6 +1,6 @@
 // src/server/models/Group.js
 import mongoose from "mongoose";
-
+import User from "./user";
 const termSchema = new mongoose.Schema({
   term: {
     type: String,

@@ -80,6 +80,16 @@ export default function Navbar() {
                   >
                     My FlashCards
                   </Link>
+                  <Link
+                    href="/allCards"
+                    className={`inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium ${
+                      pathname === "/myFlashCards"
+                        ? "border-indigo-500 text-gray-900"
+                        : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
+                    }`}
+                  >
+                    All Cards
+                  </Link>
                 </div>
               </div>
 

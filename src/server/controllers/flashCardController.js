@@ -118,3 +118,38 @@ export async function getMyFlashCard(request) {
     );
   }
 }
+
+// Delete a specific flashcard group
+export async function deleteFlashCardGroup(request) {
+  await dbConnect();
+
+  try {
+    const url = new URL(request.url);
+    const searchParams = new URLSearchParams(url.search);
+    const groupId = searchParams.get("groupId");
+
+    if (!groupId) {
+      return NextResponse.json(
+        { message: "Group ID is required" },
+        { status: 400 }
+      );
+    }
+
+    const deletedGroup = await Group.findByIdAndDelete(groupId);
+
+    if (!deletedGroup) {
+      return NextResponse.json({ message: "Group not found" }, { status: 404 });
+    }
+
+    return NextResponse.json(
+      { message: "Group deleted successfully", deletedGroup },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error("Error deleting group:", error);
+    return NextResponse.json(
+      { message: "Error deleting group", error: error.message },
+      { status: 500 }
+    );
+  }
+}

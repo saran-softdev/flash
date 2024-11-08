@@ -62,13 +62,11 @@ const UserFlashcards = () => {
         pdf.setFontSize(12);
         pdf.setFont("helvetica", "normal");
 
-        // Define max text width and calculate line height
         const margin = 20;
         const maxTextWidth = pageWidth - margin * 2;
         const lineHeight = 10;
         let currentHeight = 30;
 
-        // Add term definition text with word wrapping
         const textLines = pdf.splitTextToSize(term.definition, maxTextWidth);
         for (const line of textLines) {
           if (currentHeight + lineHeight > pageHeight - 60) {
@@ -79,9 +77,8 @@ const UserFlashcards = () => {
           currentHeight += lineHeight;
         }
 
-        // Add term image if available
-        if (term.image && term.image.url) {
-          const imgData = await fetch(term.image.url)
+        if (term.image && term.image[0]?.url) {
+          const imgData = await fetch(term.image[0].url)
             .then((res) => res.blob())
             .then(
               (blob) =>
@@ -105,10 +102,9 @@ const UserFlashcards = () => {
             maxTextWidth,
             70
           );
-          currentHeight += 80; // Adjust spacing after image
+          currentHeight += 80;
         }
 
-        // Add a new page for the next term if this isn't the last term
         if (
           term !== selectedGroupData.terms[selectedGroupData.terms.length - 1]
         ) {
@@ -124,16 +120,13 @@ const UserFlashcards = () => {
 
   return (
     <div className="p-4 sm:p-6 bg-gray-100 min-h-screen flex flex-col items-center">
-      {/* Header */}
       <div className="flex items-center justify-between w-full max-w-5xl mb-4 sm:mb-8">
         <h1 className="text-xl sm:text-2xl font-bold text-gray-800">
           Create Flashcard
         </h1>
       </div>
 
-      {/* Content Area */}
       <div className="flex flex-col sm:flex-row w-full max-w-5xl bg-white rounded-lg shadow-lg p-4 sm:p-6 gap-4 sm:gap-6">
-        {/* Sidebar for Flashcard List */}
         <div className="w-full sm:w-1/4">
           <h2 className="text-lg sm:text-xl font-semibold text-gray-700 mb-2 sm:mb-4">
             Flashcards
@@ -151,7 +144,6 @@ const UserFlashcards = () => {
           </select>
         </div>
 
-        {/* Main Content for Selected Flashcard Group */}
         <div
           className="w-full sm:w-1/2 flex flex-col items-center"
           ref={printRef}
@@ -172,15 +164,14 @@ const UserFlashcards = () => {
                 />
               )}
 
-              {/* Loop through each term in the selected group */}
               {selectedGroupData.terms.map((term, index) => (
                 <div
                   key={index}
                   className="border rounded-lg shadow-md p-4 text-center mb-4 sm:mb-6"
                 >
-                  {term.image && (
+                  {term.image && term.image[0]?.url && (
                     <img
-                      src={term.image.url}
+                      src={term.image[0].url}
                       alt={term.term}
                       className="w-24 sm:w-32 h-24 sm:h-32 object-cover rounded mb-3"
                     />
@@ -199,7 +190,6 @@ const UserFlashcards = () => {
           )}
         </div>
 
-        {/* Action Buttons */}
         <div className="w-full sm:w-1/4 flex flex-col gap-4 items-center">
           <button
             onClick={handleDownloadPdf}
